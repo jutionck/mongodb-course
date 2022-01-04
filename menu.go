@@ -7,9 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"mongodb-course/model"
 )
 
-func InsertOneStudent(ctx context.Context, coll *mongo.Collection, student Student) {
+func InsertOneStudent(ctx context.Context, coll *mongo.Collection, student model.Student) {
 	newId, err := coll.InsertOne(ctx, student)
 	if err != nil {
 		log.Fatal(err)
@@ -82,14 +83,14 @@ func FindStudentByGenderAndAge2(ctx context.Context, coll *mongo.Collection, gen
 	}
 	findOpts := options.Find().SetProjection(projection)
 
-	maleAndAge20Result := make([]*Student, 0)
+	maleAndAge20Result := make([]*model.Student, 0)
 	maleAndAge20Cursor, err := coll.Find(ctx, filterMaleAndAge20, findOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer maleAndAge20Cursor.Close(ctx)
 	for maleAndAge20Cursor.Next(ctx) {
-		var row Student
+		var row model.Student
 		err := maleAndAge20Cursor.Decode(&row)
 		if err != nil {
 			log.Fatal(err)
